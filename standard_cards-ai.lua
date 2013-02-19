@@ -825,7 +825,7 @@ sgs.ai_skill_cardask["blade-slash"] = function(self, data, pattern, target)
 		return "."
 	end
 	for _, slash in ipairs(self:getCards("Slash")) do
-		if self:slashIsEffective(slash, target) and (self:isWeak(target) or self:getOverflow()>0) then
+		if self:slashIsEffective(slash, target) and (self:isWeak(target) or self:getOverflow() > 0) then
 			return slash:toString()
 		end 
 	end
@@ -965,7 +965,7 @@ end
 
 sgs.ai_skill_invoke.EightDiagram = function(self, data)
 	local dying = 0
-	local handang = self.room:findPlayerBySkillName("jiefan")
+	local handang = self.room:findPlayerBySkillName("nosjiefan")
 	for _, aplayer in sgs.qlist(self.room:getAlivePlayers()) do
 		if aplayer:getHp() < 1 and not aplayer:hasSkill("buqu") then dying = 1 break end
 	end

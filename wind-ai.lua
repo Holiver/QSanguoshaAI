@@ -209,7 +209,7 @@ sgs.ai_card_intention.LeijiCard = 80
 function sgs.ai_slash_prohibit.leiji(self, to, card)
 	if self:isFriend(to) then return false end
 	local hcard = to:getHandcardNum()
-	if self.player:hasSkill("liegong") and (hcard>=self.player:getHp() or hcard<=self.player:getAttackRange()) then return false end
+	if self.player:hasSkill("liegong") and (hcard >= self.player:getHp() or hcard <= self.player:getAttackRange()) then return false end
 	if self.role == "rebel" and to:isLord() then
 		local other_rebel
 		for _, player in sgs.qlist(self.room:getOtherPlayers(self.player)) do
@@ -218,13 +218,13 @@ function sgs.ai_slash_prohibit.leiji(self, to, card)
 				break
 			end
 		end		
-		if not other_rebel and (self:hasSkills("hongyan") or self.player:getHp() >= 4) and (self:getCardsNum("Peach") > 0  or self:hasSkills("hongyan|ganglie|neoganglie"))  then
+		if not other_rebel and (self:hasSkills("hongyan") or self.player:getHp() >= 4) and (self:getCardsNum("Peach") > 0  or self:hasSkills("hongyan|ganglie|neoganglie")) then
 			return false
 		end
 	end
 
-	if getKnownCard(to,"Jink",true) >= 1 or (self:hasSuit("spade", true, to) and hcard >= 2) then return true end
-	if self:isEquip("EightDiagram", to) then return true end
+	if getKnownCard(to,"Jink",true) >= 1 or (self:hasSuit("spade", true, to) and hcard >= 2) or hcard >= 4 then return true end
+	if self:isEquip("EightDiagram", to) and not IgoreArmor(self.player, to) then return true end
 end
 
 

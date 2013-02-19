@@ -113,15 +113,6 @@ sgs.ai_skill_choice.jiangchi = function(self, choices)
 	return "cancel"
 end
 
-sgs.ai_view_as.gongqi = function(card, player, card_place)
-	local suit = card:getSuitString()
-	local number = card:getNumberString()
-	local card_id = card:getEffectiveId()
-	if card:getTypeId() == sgs.Card_Equip then
-		return ("slash:gongqi[%s:%s]=%d"):format(suit, number, card_id)
-	end
-end
-
 local gongqi_skill={}
 gongqi_skill.name="gongqi"
 table.insert(sgs.ai_skills, gongqi_skill)

@@ -581,10 +581,10 @@ sgs.ai_card_intention.WuqianCard = 80
 function SmartAI:cansaveplayer(player)
 	player = player or self.player
 	local good = 0
-	if  self:hasSkills("jijiu|jiefan",player)  and player:getHandcardNum()>0  then
+	if  self:hasSkills("jijiu|nosjiefan",player)  and player:getHandcardNum() > 0  then
 		good = good + 0.5 
 	end
-	if player:hasSkill("chunlao") and player:getPile("wine"):length()>0 then
+	if player:hasSkill("chunlao") and player:getPile("wine"):length() > 0 then
 		good = good + 1 
 	end
 	if player:hasSkill("buyi") then 

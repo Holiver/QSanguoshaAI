@@ -255,3 +255,77 @@ sgs.ai_playerchosen_intention.xuanfeng_slash = 80
 sgs.nosxuanfeng_keep_value = sgs.xiaoji_keep_value
 
 sgs.ai_skill_invoke.nosshangshi = sgs.ai_skill_invoke.shangshi
+
+sgs.ai_view_as.nosgongqi = function(card, player, card_place)
+	local suit = card:getSuitString()
+	local number = card:getNumberString()
+	local card_id = card:getEffectiveId()
+	if card:getTypeId() == sgs.Card_Equip then
+		return ("slash:nosgongqi[%s:%s]=%d"):format(suit, number, card_id)
+	end
+end
+
+local nosgongqi_skill = {}
+nosgongqi_skill.name = "nosgongqi"
+table.insert(sgs.ai_skills, nosgongqi_skill)
+nosgongqi_skill.getTurnUseCard = function(self, inclusive)
+	local cards = self.player:getCards("he")
+	cards = sgs.QList2Table(cards)
+	
+	local equip_card
+	
+	self:sortByUseValue(cards,true)
+	
+	for _,card in ipairs(cards) do
+		if card:getTypeId() == sgs.Card_Equip and ((self:getUseValue(card) < sgs.ai_use_value.Slash) or inclusive) then
+			equip_card = card
+			break
+		end
+	end
+
+	if equip_card then		
+		local suit = equip_card:getSuitString()
+		local number = equip_card:getNumberString()
+		local card_id = equip_card:getEffectiveId()
+		local card_str = ("slash:nosgongqi[%s:%s]=%d"):format(suit, number, card_id)
+		local slash = sgs.Card_Parse(card_str)
+		
+		assert(slash)
+		
+		return slash
+	end
+end
+
+sgs.ai_skill_invoke.nosjiefan = function(self, data)
+	local dying = data:toDying()
+	local slashnum = 0
+	local who = dying.who
+	local currentplayer = self.room:getCurrent()
+	sgs.nosjiefancurrent = currentplayer
+	for _, slash in ipairs(self:getCards("Slash")) do
+		if self:slashIsEffective(slash, currentplayer) then 
+			slashnum = slashnum + 1  
+		end 
+	end
+
+	local has_slash_prohibit_skill = false
+	for _, askill in sgs.qlist(currentplayer:getVisibleSkillList()) do
+		local filter = sgs.ai_slash_prohibit[askill:objectName()]
+		if filter and type(filter) == "function" then
+			has_slash_prohibit_skill = true
+			break
+		end
+	end
+
+	if self:isFriend(who) and not has_slash_prohibit_skill and slashnum > 0 then return true end
+end
+
+sgs.ai_skill_cardask["jiefan-slash"] = function(self, data, pattern, target)
+	target = target or global_room:getCurrent()
+	for _, slash in ipairs(self:getCards("Slash")) do
+		if self:slashIsEffective(slash, target) then 
+			return slash:toString()
+		end 
+	end
+	return "."
+end
