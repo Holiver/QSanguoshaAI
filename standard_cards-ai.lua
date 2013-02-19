@@ -1395,7 +1395,6 @@ function SmartAI:useCardSnatchOrDismantlement(card, use)
 			if not player:isLord() then table.insert(enemies, player) end
 		end
 		enemies = self:exclude(enemies, card)
-		if sgs.turncount < 3 and #enemies > 0 then enemies = {enemies[1 + (os.time() % #enemies)]} end
 		self:sort(enemies,"defenseSlash")
 		enemies = sgs.reverse(enemies)
 	else
